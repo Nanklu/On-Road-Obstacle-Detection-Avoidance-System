@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+dist-ssr/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.venv/
+venv/
+env/
+*.egg-info/
+.eggs/
+
+# YOLO model weights (large file - download at runtime)
+backend/models/*.pt
+backend/*.pt
+*.pt
+
+# Logs and temp
+*.log
+.env
+.env.local
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo

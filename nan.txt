@@ -1,0 +1,92 @@
+================================================================================
+  ON-ROAD OBSTACLE DETECTION & AVOIDANCE SYSTEM – PROJECT OVERVIEW (nan.txt)
+================================================================================
+
+WHAT IS THIS PROJECT?
+---------------------
+This is a full-stack application for an "On-Road Obstacle Detection & Avoidance
+System." It combines:
+
+  • A React + Vite + Tailwind CSS web dashboard (marketing-style UI with a
+    live demo section).
+  • A Python FastAPI backend that runs YOLO (Ultralytics) with OpenCV to
+    detect obstacles in uploaded road images.
+
+The repo lives in your "Ai" folder and is meant for demos, coursework, or
+prototyping driver-assistance style computer vision.
+
+WHAT IS IT ABOUT?
+-----------------
+The goal is to show how modern object detection (YOLO) can identify objects in
+road scenes from still images, expose that through a clean HTTP API, and let a
+web frontend display health, stats, and detection results. The dashboard
+explains features, tech stack, how the pipeline works, results, and contact
+sections—plus a live image upload that talks to the backend.
+
+HOW IT WORKS (HIGH LEVEL)
+-------------------------
+1. Backend startup
+   - FastAPI loads once at startup (lifespan) and keeps a single YOLO model in
+     memory (see backend/app.py) so each request reuses it instead of reloading.
+
+2. API (backend)
+   - GET  /health  – status and whether the model is loaded.
+   - GET  /stats   – frames processed and latency-style metrics.
+   - POST /detect  – multipart image upload; returns detections (labels,
+     confidence, bounding boxes), timing, frame counts, and optionally an
+     annotated image (base64) when requested.
+
+3. Detection pipeline
+   - Images are processed with OpenCV / YOLO in backend/utils/processing.py
+     (and related route logic in backend/routes/detect.py).
+
+4. Frontend
+   - src/config.js exports API_BASE_URL (must match where the API actually runs).
+   - src/api/client.js wraps getHealth(), getStats(), and image upload to /detect.
+   - Components such as LiveDemo.jsx poll health/stats and send uploaded images
+     to /detect, then show the response.
+
+5. Port alignment (important)
+   - As shipped in this workspace, src/config.js points to port 8001, while
+     backend/app.py’s built-in uvicorn example uses port 8000. Either:
+       (A) Start the API on 8001:  uvicorn app:app --host 0.0.0.0 --port 8001 --reload
+       (B) Or change API_BASE_URL in src/config.js to match the port you use
+           (e.g. http://127.0.0.1:8000).
+
+HOW TO RUN IT
+---------------
+
+Prerequisites
+  • Node.js 18+ and npm (for the frontend).
+  • Python 3.10+ (for the backend).
+  • Internet on first run if YOLO weights need to download (or place weights
+    under backend/models/ per backend/models/README.md if applicable).
+
+--- Backend (from project root, in PowerShell) ---
+
+  cd C:\Users\tashu\OneDrive\Desktop\Ai\backend
+  python -m venv .venv
+  .\.venv\Scripts\activate
+  pip install -r requirements.txt
+  uvicorn app:app --host 0.0.0.0 --port 8001 --reload
+
+  (Use port 8001 to match the current frontend config; or use 8000 and edit
+   src/config.js accordingly.)
+
+  API docs: http://127.0.0.1:8001/docs  (or :8000 if you use that port)
+
+--- Frontend (new terminal, from project root) ---
+
+  cd C:\Users\tashu\OneDrive\Desktop\Ai
+  npm install
+  npm run dev
+
+  Open the URL Vite prints (usually http://localhost:5173).
+
+Optional production-style checks:
+  npm run build
+  npm run preview
+
+================================================================================
+End of nan.txt
+================================================================================

@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-slate-950 text-slate-100 antialiased;
+}
+
+.glass-card {
+  @apply bg-slate-900/60 border border-slate-700/70 backdrop-blur-xl shadow-xl shadow-sky-500/10;
+}
+
+.section-padding {
+  @apply py-16 sm:py-20 lg:py-24;
+}
+
+.container-page {
+  @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
